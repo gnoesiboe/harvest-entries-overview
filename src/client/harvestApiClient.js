@@ -41,7 +41,7 @@ function _get(path: string, accessToken: string, accountId: string, queryParams:
         params: queryParams,
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Harvest-Account-ID': accountId //@todo make setting of this
+            'Harvest-Account-ID': accountId
         }
     };
 
