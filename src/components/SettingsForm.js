@@ -10,11 +10,12 @@ import FormInput from '../lib/forms/component/FormInput';
 import FormGroup from './form/FormGroup';
 import FormErrorList from './form/FormErrorList';
 
-export type OnSubmitCallback = (harvestAccessToken: string) => void;
+export type OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string) => void;
 
 type Props = {
     onSubmit: OnSubmitCallback,
-    harvestAccessToken: ?string
+    harvestAccessToken: ?string,
+    harvestAccountId: ?string
 };
 
 type State = {
@@ -33,14 +34,18 @@ export default class SettingsForm extends React.Component<Props, State> {
     };
 
     _onFormStateValid: OnFormValidCallback = (data: FormData) => {
-        this.props.onSubmit(data.harvestAccessToken);
+        this.props.onSubmit(
+            data.harvestAccessToken,
+            data.harvestAccountId
+        );
     }
 
     state: State = {
         form: createSettingsFormState(
             this._onFormStateChange,
             this._onFormStateValid,
-            this.props.harvestAccessToken || ''
+            this.props.harvestAccessToken,
+            this.props.harvestAccountId
         )
     };
 
@@ -62,6 +67,24 @@ export default class SettingsForm extends React.Component<Props, State> {
         );
     }
 
+    _renderHarvestAccountIdFormGroup() {
+        var fieldState = this.state.form.getElementState('harvestAccountId');
+
+        return (
+            <FormGroup element={ fieldState }>
+                <label htmlFor="harvest_account_id_field" className="form-label">Harvest Account Id</label>
+                <FormInput
+                    type="text"
+                    autoFocus={ true }
+                    id="harvest_account_id_field"
+                    element={  fieldState }
+                    className="form-control"
+                />
+                { fieldState.hasErrors() ? <FormErrorList errors={ fieldState.errors } /> : null }
+            </FormGroup>
+        );
+    }
+
     render() {
         var { form } = this.state;
 
@@ -69,6 +92,7 @@ export default class SettingsForm extends React.Component<Props, State> {
             <div>
                 <Form formState={ form } className="form">
                     { this._renderHarvestAccessTokenFormGroup() }
+                    { this._renderHarvestAccountIdFormGroup() }
                     <div>
                         <button type="submit" className="btn btn-success">Opslaan</button>
                     </div>

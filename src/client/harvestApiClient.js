@@ -8,12 +8,12 @@ const USER_LIST_PATH = '/users';
 export type ApiResponse = Promise<Object | Array<Object>>;
 export type ApiListResponse = Promise<Array<Object>>;
 
-export function getAllUsers(accessToken: string): ApiListResponse {
+export function getAllUsers(accessToken: string, accountId: string): ApiListResponse {
     var userSets = [];
 
     var fetch = (page) => {
         return new Promise((resolve) => {
-            _get(USER_LIST_PATH, accessToken, { page })
+            _get(USER_LIST_PATH, accessToken, accountId, { page })
                 .then(response => {
 
                     // $ExpectError
@@ -34,14 +34,14 @@ export function getAllUsers(accessToken: string): ApiListResponse {
         .then(() => [].concat(...userSets));
 }
 
-function _get(path: string, accessToken: string, queryParams: Object = {}): ApiResponse {
+function _get(path: string, accessToken: string, accountId: string, queryParams: Object = {}): ApiResponse {
     var url = BASE_URL + path;
 
     var options = {
         params: queryParams,
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Harvest-Account-ID': 153862 //@todo make setting of this
+            'Harvest-Account-ID': accountId //@todo make setting of this
         }
     };
 

@@ -11,9 +11,9 @@ function _createPromiseAction(type: String, promise: Promise<any>, data: Object 
     };
 }
 
-export function createFetchAllUsersAction(harvestAccessToken: string): Function {
+export function createFetchAllUsersAction(harvestAccessToken: string, accountId: string): Function {
     return (dispatch) => {
-        var promise = getAllUsers(harvestAccessToken),
+        var promise = getAllUsers(harvestAccessToken, accountId),
             action = _createPromiseAction(FETCH_ALL_USERS, promise);
 
         return dispatch(action);

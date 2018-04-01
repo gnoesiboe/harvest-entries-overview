@@ -13,6 +13,9 @@ export default (store: Store) => (next: Next) => (action: Action) : any => {
     var response = next(action),
         newState : GlobalState = store.getState();
 
+    // don't save users
+    delete newState.users;
+
     localStorageRepository.save(newState);
 
     return response;

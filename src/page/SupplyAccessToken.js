@@ -30,11 +30,11 @@ class SupplyAccessToken extends React.Component<Props, State> {
         redirect: false
     };
 
-    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string) => {
+    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string) => {
         var { dispatch } = this.props;
 
         dispatch(
-            createUpdateSettingsAction(harvestAccessToken)
+            createUpdateSettingsAction(harvestAccessToken, harvestAccountId)
         );
 
         this.setState(
@@ -57,6 +57,7 @@ class SupplyAccessToken extends React.Component<Props, State> {
                 <h1>Settings</h1>
                 <SettingsForm
                     harvestAccessToken={ settings.harvestAccessToken }
+                    harvestAccountId={ settings.harvestAccountId }
                     onSubmit={ this._onFormSubmit }
                 />
             </div>
