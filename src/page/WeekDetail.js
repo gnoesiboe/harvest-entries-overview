@@ -44,17 +44,9 @@ class WeekDetail extends React.Component<Props, State> {
     }
 
     componentDidMount(): void {
-        var { settings, dispatch } = this.props;
-
-        // @todo check only needed for flow, can we change this?
-        if (settings.harvestAccessToken && settings.harvestAccountId) {
-            dispatch(
-                createFetchAllUsersAction(
-                    settings.harvestAccessToken,
-                    settings.harvestAccountId
-                )
-            )
-        }
+        this.props.dispatch(
+            createFetchAllUsersAction()
+        )
     }
 
     render() {
