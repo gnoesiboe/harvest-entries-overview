@@ -24,7 +24,7 @@ type State = {
     redirect: boolean
 };
 
-class SupplyAccessToken extends React.Component<Props, State> {
+class Settings extends React.Component<Props, State> {
 
     state: State = {
         redirect: false
@@ -71,4 +71,4 @@ function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
     };
 }
 
-export default connect(_mapGlobalStateToProps)(SupplyAccessToken);
+export default connect(_mapGlobalStateToProps)(Settings);

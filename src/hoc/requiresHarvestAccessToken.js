@@ -5,7 +5,7 @@ import type { GlobalState } from '../redux/state/type';
 import { connect } from 'react-redux';
 import { isString } from 'lodash';
 import { Redirect } from 'react-router-dom';
-import { createSupplyAccessTokenPath } from '../routing/urlGenerator';
+import { createSettingsPath } from '../routing/urlGenerator';
 
 type Props = {
     harvestAccessToken: ?string
@@ -46,7 +46,7 @@ export default function(CompostedComponent: any ) {
 
         render() {
             if (this.state.accessTokenIsSet === false) {
-                return <Redirect to={ createSupplyAccessTokenPath() } />;
+                return <Redirect to={ createSettingsPath() } />;
             }
 
             return <CompostedComponent { ...this.props } />

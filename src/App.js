@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import WeekDetail from './page/WeekDetail';
-import { createWeekDetailPath, createHomePath, createSupplyAccessTokenPath } from './routing/urlGenerator';
+import { createWeekDetailPath, createHomePath, createSettingsPath } from './routing/urlGenerator';
 import CurrentWeekRedirect from './page/CurrentWeekRedirect';
-import SupplyAccessToken from './page/SupplyAccessToken';
+import Settings from './page/Settings';
 
 type Props = {};
 
@@ -20,7 +20,7 @@ class App extends Component<Props> {
                         <Switch>
                             <Route path={ createHomePath() } exact component={ CurrentWeekRedirect } />
                             <Route path={ createWeekDetailPath() } exact component={ WeekDetail } />
-                            <Route path={ createSupplyAccessTokenPath() } exact component={ SupplyAccessToken } />
+                            <Route path={ createSettingsPath() } exact component={ Settings } />
                         </Switch>
                     </BrowserRouter>
                 </div>
