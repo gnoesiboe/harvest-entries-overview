@@ -20,8 +20,6 @@ export default function settingsReducer(currentState: SettingsReducerState = DEF
 
         default:
             // action not useful for this reducer, let it go..
-            break;
+            return currentState;
     }
-
-    return currentState;
 }

@@ -5,13 +5,24 @@ import { extractPath } from '../utility/objectPathHelper';
 import { Redirect } from 'react-router-dom';
 import { createHomePath } from '../routing/urlGenerator';
 import requiresHarvestAccessToken from '../hoc/requiresHarvestAccessToken';
+import { connect } from 'react-redux';
+import type { GlobalState } from '../redux/state/type';
+import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
+import type { Dispatch } from 'react-redux';
+import { createFetchAllUsersAction } from '../redux/action/factory/userActionFactory';
 
 type Props = {
+    settings: SettingsReducerState,
+    dispatch: Dispatch,
     match: {
         params: {
             number: Number
         }
     }
+};
+
+type ReduxProps = {
+    settings: SettingsReducerState
 };
 
 type State = {
@@ -24,12 +35,23 @@ class WeekDetail extends React.Component<Props, State> {
         weekNumber: null
     }
 
-    componentDidMount() : void {
+    componentWillMount(): void {
         var weekNumber = extractPath('match.params.number', this.props, false);
 
         this.setState(currentState => {
             return { ...currentState, weekNumber };
         });
+    }
+
+    componentDidMount(): void {
+        var { settings, dispatch } = this.props;
+
+        // @todo check only needed for flow, can we change this?
+        if (settings.harvestAccessToken) {
+            dispatch(
+                createFetchAllUsersAction(settings.harvestAccessToken)
+            )
+        }
     }
 
     render() {
@@ -51,4 +73,10 @@ class WeekDetail extends React.Component<Props, State> {
     }
 }
 
-export default requiresHarvestAccessToken(WeekDetail);
+function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
+    return {
+        settings: globalState.settings
+    };
+}
+
+export default requiresHarvestAccessToken(connect(_mapGlobalStateToProps)(WeekDetail));
