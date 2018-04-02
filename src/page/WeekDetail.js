@@ -10,7 +10,8 @@ import type { GlobalState } from '../redux/state/type';
 import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
 import type { Dispatch } from 'react-redux';
 import { createFetchAllUsersAction } from '../redux/action/factory/userActionFactory';
-import { getStartOfWeek, getEndOfWeek } from '../utility/dateTimeHelper';
+import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utility/dateTimeHelper';
+import Moment from 'moment';
 
 type Props = {
     settings: SettingsReducerState,
@@ -50,6 +51,44 @@ class WeekDetail extends React.Component<Props, State> {
         )
     }
 
+    _renderTableHead(allDatesToRender: Array<Moment>) {
+        return (
+            <thead>
+                <tr>
+                    { allDatesToRender.map((day) => {
+                        var dayInMonth = day.format('D');
+
+                        return (
+                            <th key={ dayInMonth }>{ dayInMonth }</th>
+                        )
+                    }) }
+                </tr>
+            </thead>
+        );
+    }
+
+    _renderTableBody(allDatesToRender: Array<Moment>) {
+        var userIds = this.props.settings.userIds;
+
+        return (
+            <tbody>
+                { userIds.map((userId: Number) => {
+                    return (
+                        <tr key={ userId.toString() }>
+                            { allDatesToRender.map((day) => {
+                                var dayInMonth = day.format('D');
+
+                                return (
+                                    <td key={ dayInMonth }>@todo</td>
+                                )
+                            }) }
+                        </tr>
+                    );
+                }) }
+            </tbody>
+        );
+    }
+
     render() {
         var { weekNumber } = this.state;
 
@@ -64,9 +103,15 @@ class WeekDetail extends React.Component<Props, State> {
         var startOfWeek = getStartOfWeek(weekNumber),
             endOfWeek = getEndOfWeek(weekNumber);
 
+        var allDatesToRender = getAllDatesWithinPeriod(startOfWeek, endOfWeek);
+
         return (
             <div>
                 <h1>Time entries { startOfWeek.format('D MMMM') } - { endOfWeek.format('D MMMM') }</h1>
+                <table className="table">
+                    { this._renderTableHead(allDatesToRender) }
+                    { this._renderTableBody(allDatesToRender) }
+                </table>
             </div>
         );
     }
