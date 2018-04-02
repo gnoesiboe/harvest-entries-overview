@@ -7,7 +7,8 @@ export function createSettingsFormState(
     onChangeCallback: OnChangeCallbackType,
     onFormValidCallback: OnFormValidCallback,
     harvestAccessToken: ?string,
-    harvestAccountId: ?string
+    harvestAccountId: ?string,
+    userIds: Array<Number>
 ): FormState {
     var constraintSet = {
         harvestAccessToken: {
@@ -19,13 +20,15 @@ export function createSettingsFormState(
             presence: {
                 allowEmpty: false
             }
-        }
+        },
+        userIds: {}
     };
 
     var state = new FormState(onChangeCallback, onFormValidCallback, constraintSet);
 
     state.addElement('harvestAccessToken', harvestAccessToken || '');
     state.addElement('harvestAccountId', harvestAccountId || '');
+    state.addElement('userIds', userIds);
 
     return state;
 }

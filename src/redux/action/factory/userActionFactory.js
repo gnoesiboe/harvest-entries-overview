@@ -19,8 +19,9 @@ export function createFetchAllUsersAction(): Function {
         var promise = getAllUsers(
                 state.settings.harvestAccessToken,
                 state.settings.harvestAccountId
-            ),
-            action = _createPromiseAction(FETCH_ALL_USERS, promise);
+            );
+
+        var action = _createPromiseAction(FETCH_ALL_USERS, promise);
 
         return dispatch(action);
     };

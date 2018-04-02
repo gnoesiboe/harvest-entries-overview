@@ -21,7 +21,7 @@ export default class FormElementState {
         this._touched = false;
     }
 
-    applyChange(newData : string | boolean) : void {
+    applyChange(newData : any) : void {
         this._data = newData;
 
         this._onChange();
@@ -37,7 +37,7 @@ export default class FormElementState {
         return this._touched;
     }
 
-    get data() : string | boolean {
+    get data() : any {
         return this._data;
     }
 

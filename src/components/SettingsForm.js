@@ -9,13 +9,18 @@ import Form from '../lib/forms/component/Form';
 import FormInput from '../lib/forms/component/FormInput';
 import FormGroup from './form/FormGroup';
 import FormErrorList from './form/FormErrorList';
+import FormMultipleChoice from './form/FormMultipleChoice';
+import { convertUsersCollectionToFormChoiceOptions } from '../utility/collectionToFormChoiceOptionsConverter';
+import type { UsersReducerState } from '../redux/reducer/usersReducer';
 
-export type OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string) => void;
+export type OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<Number>) => void;
 
 type Props = {
     onSubmit: OnSubmitCallback,
     harvestAccessToken: ?string,
-    harvestAccountId: ?string
+    harvestAccountId: ?string,
+    userIds: Array<Number>,
+    users: UsersReducerState
 };
 
 type State = {
@@ -36,7 +41,8 @@ export default class SettingsForm extends React.Component<Props, State> {
     _onFormStateValid: OnFormValidCallback = (data: FormData) => {
         this.props.onSubmit(
             data.harvestAccessToken,
-            data.harvestAccountId
+            data.harvestAccountId,
+            data.userIds
         );
     }
 
@@ -45,7 +51,8 @@ export default class SettingsForm extends React.Component<Props, State> {
             this._onFormStateChange,
             this._onFormStateValid,
             this.props.harvestAccessToken,
-            this.props.harvestAccountId
+            this.props.harvestAccountId,
+            this.props.userIds
         )
     };
 
@@ -85,19 +92,37 @@ export default class SettingsForm extends React.Component<Props, State> {
         );
     }
 
+    _renderUserIdsChoice() {
+        var fieldState = this.state.form.getElementState('userIds');
+
+        var { users } = this.props;
+
+        return (
+            <FormGroup element={ fieldState }>
+                <label htmlFor="user_ids_field" className="form-label">User ids</label>
+                <FormMultipleChoice
+                    id="user_ids_field"
+                    element={ fieldState }
+                    options={ convertUsersCollectionToFormChoiceOptions(users) }
+                    value={ fieldState.data }
+                />
+                { fieldState.hasErrors() ? <FormErrorList errors={ fieldState.errors } /> : null }
+            </FormGroup>
+        );
+    }
+
     render() {
         var { form } = this.state;
 
         return (
-            <div>
-                <Form formState={ form } className="form">
-                    { this._renderHarvestAccessTokenFormGroup() }
-                    { this._renderHarvestAccountIdFormGroup() }
-                    <div>
-                        <button type="submit" className="btn btn-success">Opslaan</button>
-                    </div>
-                </Form>
-            </div>
+            <Form formState={ form } className="form">
+                { this._renderHarvestAccessTokenFormGroup() }
+                { this._renderHarvestAccountIdFormGroup() }
+                { this._renderUserIdsChoice() }
+                <div>
+                    <button type="submit" className="btn btn-success">Opslaan</button>
+                </div>
+            </Form>
         );
     }
 }

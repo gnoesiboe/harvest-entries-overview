@@ -7,7 +7,9 @@ export type Action = $ReadOnly<{
 
 export type UpdateSettingsAction = $ReadOnly<{
     type: UPDATE_SETTINGS,
-    harvestAccessToken: String
+    harvestAccessToken: String,
+    harvestAccountId: String,
+    userIds: Array<Number>
 }>;
 
 export type FetchAllUsersAction = $ReadOnly<{

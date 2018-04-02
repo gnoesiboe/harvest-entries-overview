@@ -6,18 +6,22 @@ import type { OnSubmitCallback } from '../components/SettingsForm';
 import { connect } from 'react-redux';
 import type { GlobalState } from '../redux/state/type';
 import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
+import type { UsersReducerState } from '../redux/reducer/usersReducer';
 import type { Dispatch } from 'react-redux';
 import { createUpdateSettingsAction } from '../redux/action/factory/settingsActionFactory';
 import { Redirect } from 'react-router-dom';
 import { createHomePath } from '../routing/urlGenerator';
+import { createFetchAllUsersAction } from '../redux/action/factory/userActionFactory';
 
 type Props = {
     settings: SettingsReducerState,
+    users: UsersReducerState,
     dispatch: Dispatch
 };
 
 type ReduxProps = {
-    settings: SettingsReducerState
+    settings: SettingsReducerState,
+    users: UsersReducerState
 };
 
 type State = {
@@ -30,11 +34,23 @@ class Settings extends React.Component<Props, State> {
         redirect: false
     };
 
-    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string) => {
+    componentDidMount() {
+        var { settings } = this.props;
+
+        if (!settings.harvestAccessToken && settings.harvestAccountId) {
+            return;
+        }
+
+        this.props.dispatch(
+            createFetchAllUsersAction()
+        );
+    }
+
+    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<Number>) => {
         var { dispatch } = this.props;
 
         dispatch(
-            createUpdateSettingsAction(harvestAccessToken, harvestAccountId)
+            createUpdateSettingsAction(harvestAccessToken, harvestAccountId, userIds)
         );
 
         this.setState(
@@ -45,7 +61,7 @@ class Settings extends React.Component<Props, State> {
     }
 
     render() {
-        var { settings } = this.props;
+        var { settings, users } = this.props;
         var { redirect } = this.state;
 
         if (redirect) {
@@ -58,6 +74,8 @@ class Settings extends React.Component<Props, State> {
                 <SettingsForm
                     harvestAccessToken={ settings.harvestAccessToken }
                     harvestAccountId={ settings.harvestAccountId }
+                    userIds={ settings.userIds }
+                    users={ users }
                     onSubmit={ this._onFormSubmit }
                 />
             </div>
@@ -67,7 +85,8 @@ class Settings extends React.Component<Props, State> {
 
 function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
     return {
-        settings: globalState.settings
+        settings: globalState.settings,
+        users: globalState.users
     };
 }
 
