@@ -10,13 +10,14 @@ import type { GlobalState } from '../redux/state/type';
 import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
 import type { Dispatch } from 'react-redux';
 import { createFetchAllUsersAction } from '../redux/action/factory/userActionFactory';
+import { getStartOfWeek, getEndOfWeek } from '../utility/dateTimeHelper';
 
 type Props = {
     settings: SettingsReducerState,
     dispatch: Dispatch,
     match: {
         params: {
-            number: Number
+            number: number
         }
     }
 };
@@ -26,7 +27,7 @@ type ReduxProps = {
 };
 
 type State = {
-    weekNumber: ?Number
+    weekNumber: ?number
 };
 
 class WeekDetail extends React.Component<Props, State> {
@@ -52,17 +53,20 @@ class WeekDetail extends React.Component<Props, State> {
     render() {
         var { weekNumber } = this.state;
 
-        if (weekNumber === null) {
-            return null;
-        }
-
         if (weekNumber === false) {
             return <Redirect to={ createHomePath() } />;
         }
 
+        if (!weekNumber) {
+            return null;
+        }
+
+        var startOfWeek = getStartOfWeek(weekNumber),
+            endOfWeek = getEndOfWeek(weekNumber);
+
         return (
             <div>
-                <h1>@todo WeekDetail</h1>
+                <h1>Time entries { startOfWeek.format('D MMMM') } - { endOfWeek.format('D MMMM') }</h1>
             </div>
         );
     }
