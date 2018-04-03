@@ -10,7 +10,7 @@ export type UpdateSettingsAction = $ReadOnly<{
     type: UPDATE_SETTINGS,
     harvestAccessToken: String,
     harvestAccountId: String,
-    userIds: Array<Number>
+    userIds: Array<number>
 }>;
 
 // @todo have it better match reality

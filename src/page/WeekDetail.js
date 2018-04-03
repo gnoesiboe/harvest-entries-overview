@@ -77,7 +77,7 @@ class WeekDetail extends React.Component<Props, State> {
         );
     }
 
-    _onDayForUserRefresh(userId: Number, day: Moment) {
+    _onDayForUserRefresh(userId: number, day: Moment) {
         this.props.dispatch(
             createFetchTimeEntriesForUserOnDayAction(userId, day)
         );
@@ -90,7 +90,7 @@ class WeekDetail extends React.Component<Props, State> {
 
         return (
             <tbody>
-                { userIds.map((userId: Number) => {
+                { userIds.map((userId: number) => {
                     var user = resolveUser(userId, users);
 
                     return (

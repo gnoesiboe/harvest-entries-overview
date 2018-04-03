@@ -13,13 +13,13 @@ import FormMultipleChoice from './form/FormMultipleChoice';
 import { convertUsersCollectionToFormChoiceOptions } from '../utility/collectionToFormChoiceOptionsConverter';
 import type { UsersReducerState } from '../redux/reducer/usersReducer';
 
-export type OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<Number>) => void;
+export type OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<number>) => void;
 
 type Props = {
     onSubmit: OnSubmitCallback,
     harvestAccessToken: ?string,
     harvestAccountId: ?string,
-    userIds: Array<Number>,
+    userIds: Array<number>,
     users: UsersReducerState
 };
 

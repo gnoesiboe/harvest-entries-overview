@@ -6,7 +6,7 @@ import type { GlobalState } from '../../state/type';
 import { FETCH_TIME_ENTRIES_FOR_USER_ON_DAY } from '../type';
 import { createPromiseAction } from './actionFactory';
 
-export function createFetchTimeEntriesForUserOnDayAction(userId: Number, day: Moment): Function {
+export function createFetchTimeEntriesForUserOnDayAction(userId: number, day: Moment): Function {
     return (dispatch: Function, getState: Function) => {
         var state: GlobalState = getState();
 

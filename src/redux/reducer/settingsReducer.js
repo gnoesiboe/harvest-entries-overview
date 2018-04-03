@@ -6,7 +6,7 @@ import { UPDATE_SETTINGS } from '../action/type';
 export type SettingsReducerState = {
     harvestAccessToken: string | null,
     harvestAccountId: string | null,
-    userIds: Array<Number>
+    userIds: Array<number>
 };
 
 const DEFAULT_STATE: SettingsReducerState = {

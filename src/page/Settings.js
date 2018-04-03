@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import type { GlobalState } from '../redux/state/type';
 import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
 import type { UsersReducerState } from '../redux/reducer/usersReducer';
-import type { Dispatch } from 'react-redux';
 import { createUpdateSettingsAction } from '../redux/action/factory/settingsActionFactory';
 import { Redirect } from 'react-router-dom';
 import { createHomePath } from '../routing/urlGenerator';
@@ -46,7 +45,7 @@ class Settings extends React.Component<Props, State> {
         );
     }
 
-    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<Number>) => {
+    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<number>) => {
         var { dispatch } = this.props;
 
         dispatch(

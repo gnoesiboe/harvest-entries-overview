@@ -2,8 +2,8 @@
 
 import Moment from 'moment';
 
-export function getCurrentWeekNumber(): Number {
-    return Moment().isoWeek();
+export function getCurrentWeekNumber(): number {
+    return parseInt(Moment().isoWeek(), 10);
 }
 
 export function getStartOfWeek(weekNumber: number): Moment {

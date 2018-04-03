@@ -39,7 +39,7 @@ export function getAllUsers(accessToken: string, accountId: string): ApiListResp
 export function getTimeEntries(
     accessToken: string,
     accountId: string,
-    userId: ?Number,
+    userId: ?number,
     from: Moment,
     until: Moment
 ): ApiListResponse {

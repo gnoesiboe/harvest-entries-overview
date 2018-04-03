@@ -8,7 +8,7 @@ export function createSettingsFormState(
     onFormValidCallback: OnFormValidCallback,
     harvestAccessToken: ?string,
     harvestAccountId: ?string,
-    userIds: Array<Number>
+    userIds: Array<number>
 ): FormState {
     var constraintSet = {
         harvestAccessToken: {
