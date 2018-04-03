@@ -5,9 +5,11 @@ import type { TimeEntry } from '../model/type';
 import type { TimeEntriesReducerState } from '../redux/reducer/timeEntriesReducer';
 
 export function resolveTimeEntriesForUserOnDay(userId: number, day: Moment, timeEntries: TimeEntriesReducerState): Array<TimeEntry> {
-    var timeEntriesAsArray: Array<TimeEntry> = Object.keys(timeEntries).map((key: string) => {
-        return timeEntries[parseInt(key, 10)];
-    });
+    var timeEntriesAsArray: Array<TimeEntry> = Object.keys(timeEntries).map(
+        (key: string) => {
+            return timeEntries[parseInt(key, 10)];
+        }
+    );
 
     if (timeEntriesAsArray.length === 0) {
         return [];
