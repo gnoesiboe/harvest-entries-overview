@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { resolveTimeEntriesForUserOnDay } from '../../../resolver/timeEntriesResolver';
 import type { TimeEntriesReducerState } from '../../../redux/reducer/timeEntriesReducer';
 import { createFetchTimeEntriesForUserOnDayAction } from '../../../redux/action/factory/timeEntryActionFactory';
+import groupArray from 'group-array';
 
 type Props = {
     user: User,
@@ -89,7 +90,7 @@ class DayForUser extends React.Component<Props, State> {
         return (
             <li className="list-group-item" key={ timeEntry.id }>
                 <span className="badge">{ timeEntry.hours }</span>
-                { timeEntry.project.name } / { timeEntry.task.name }
+                { timeEntry.task.name }
             </li>
         )
     }
@@ -107,14 +108,27 @@ class DayForUser extends React.Component<Props, State> {
             );
         }
 
+        var timeEntriesGroupedByProject: { [string]: Array<TimeEntry> } = groupArray(timeEntries, 'project.name');
+
         return (
             <div>
                 <button className="btn btn-link" onClick={ this._onRefreshClick }>
                     <i className="glyphicon glyphicon-refresh" />
                 </button>
-                <ul className="list-group">
-                    { timeEntries.map((timeEntry: TimeEntry) => this._renderTimeEntry(timeEntry)) }
-                </ul>
+
+                { Object.keys(timeEntriesGroupedByProject).map((projectName: string) => {
+                    var timeEntriesInProject: Array<TimeEntry> = timeEntriesGroupedByProject[projectName];
+
+                    return (
+                        <div className="panel panel-info" key={ projectName }>
+                            <div className="panel-heading">{ projectName }</div>
+
+                            <ul className="list-group">
+                                { timeEntriesInProject.map((timeEntry: TimeEntry) => this._renderTimeEntry(timeEntry)) }
+                            </ul>
+                        </div>
+                    )
+                }) }
             </div>
         );
     }

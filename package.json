@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.5",
+    "group-array": "^0.3.3",
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "react": "^16.3.0",
