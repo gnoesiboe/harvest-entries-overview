@@ -3,17 +3,11 @@
 import { FETCH_ALL_USERS } from '../type';
 import { getAllUsers } from '../../../client/harvestApiClient';
 import type { GlobalState } from '../../state/type';
+import { createPromiseAction } from './actionFactory';
 
-function _createPromiseAction(type: String, promise: Promise<any>, data: Object = {}, meta: Object = {}): Object {
-    return {
-        type,
-        payload: { promise, data },
-        meta
-    };
-}
 
 export function createFetchAllUsersAction(): Function {
-    return (dispatch, getState) => {
+    return (dispatch: Function, getState: Function) => {
         var state: GlobalState = getState();
 
         var promise = getAllUsers(
@@ -21,7 +15,7 @@ export function createFetchAllUsersAction(): Function {
                 state.settings.harvestAccountId
             );
 
-        var action = _createPromiseAction(FETCH_ALL_USERS, promise);
+        var action = createPromiseAction(FETCH_ALL_USERS, promise);
 
         return dispatch(action);
     };

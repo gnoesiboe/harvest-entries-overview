@@ -10,13 +10,15 @@ type Store = {
 };
 
 export default (store: Store) => (next: Next) => (action: Action) : any => {
-    var response = next(action),
-        newState : GlobalState = store.getState();
+    var response: any = next(action),
+        globalState: GlobalState = store.getState();
 
-    // don't save users
-    delete newState.users;
+    // don't save users and time entries in local storage
+    var stateToSave = {
+        settings: globalState.settings
+    };
 
-    localStorageRepository.save(newState);
+    localStorageRepository.save(stateToSave);
 
     return response;
 }

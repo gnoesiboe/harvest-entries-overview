@@ -15,7 +15,7 @@ class App extends Component<Props> {
     render() {
         return (
             <div className="app">
-                <div className="container">
+                <div className="container-fluid">
                     <BrowserRouter>
                         <Switch>
                             <Route path={ createHomePath() } exact component={ CurrentWeekRedirect } />
