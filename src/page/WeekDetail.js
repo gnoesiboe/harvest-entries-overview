@@ -10,18 +10,14 @@ import type { GlobalState } from '../redux/state/type';
 import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
 import type { UsersReducerState } from '../redux/reducer/usersReducer';
 import { createFetchAllUsersAction } from '../redux/action/factory/userActionFactory';
-import { createFetchTimeEntriesForUserOnDayAction } from '../redux/action/factory/timeEntryActionFactory';
 import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utility/dateTimeHelper';
 import Moment from 'moment';
 import DayForUser from '../lib/forms/component/DayForUser';
 import { resolveUser } from '../resolver/userResolver';
-import { resolveTimeEntriesForUserOnDay } from '../resolver/timeEntriesResolver';
-import type { TimeEntriesReducerState } from '../redux/reducer/timeEntriesReducer';
 
 type Props = {
     settings: SettingsReducerState,
     users: UsersReducerState,
-    timeEntries: TimeEntriesReducerState,
     dispatch: Dispatch,
     match: {
         params: {
@@ -33,18 +29,19 @@ type Props = {
 type ReduxProps = {
     settings: SettingsReducerState,
     users: UsersReducerState,
-    timeEntries: TimeEntriesReducerState
 };
 
 type State = {
     weekNumber: ?number
 };
 
+const COLUMN_WIDTH = 100 / 8;
+
 class WeekDetail extends React.Component<Props, State> {
 
     state: State = {
         weekNumber: null
-    }
+    };
 
     componentWillMount(): void {
         var weekNumber = extractPath('match.params.number', this.props, false);
@@ -64,12 +61,14 @@ class WeekDetail extends React.Component<Props, State> {
         return (
             <thead>
                 <tr>
-                    <th>User</th>
+                    <th style={{ width: `${COLUMN_WIDTH}%` }}>User</th>
                     { allDatesToRender.map((day) => {
-                        var dayInMonth = day.format('D');
+                        var dayInMonth = day.format('D MMM');
 
                         return (
-                            <th key={ dayInMonth }>{ dayInMonth }</th>
+                            <th key={ dayInMonth } style={{ width: `${COLUMN_WIDTH}%` }}>
+                                { dayInMonth }
+                                </th>
                         )
                     }) }
                 </tr>
@@ -77,14 +76,8 @@ class WeekDetail extends React.Component<Props, State> {
         );
     }
 
-    _onDayForUserRefresh(userId: number, day: Moment) {
-        this.props.dispatch(
-            createFetchTimeEntriesForUserOnDayAction(userId, day)
-        );
-    }
-
     _renderTableBody(allDatesToRender: Array<Moment>) {
-        var { settings, users, timeEntries } = this.props;
+        var { settings, users } = this.props;
 
         var userIds = settings.userIds;
 
@@ -99,15 +92,13 @@ class WeekDetail extends React.Component<Props, State> {
                                 { user.name }
                             </th>
                             { allDatesToRender.map((day) => {
-                                var dayInMonth = day.format('D'),
-                                    timeEntriesForUserOnDay = resolveTimeEntriesForUserOnDay(userId, day, timeEntries);
+                                var dayInMonth = day.format('D');
 
                                 return (
                                     <td key={ dayInMonth } className="text-left">
                                         <DayForUser
                                             user={ user }
-                                            onRefresh={ this._onDayForUserRefresh.bind(this, userId, day) }
-                                            timeEntries={ timeEntriesForUserOnDay }
+                                            day={ day }
                                         />
                                     </td>
                                 )
@@ -151,8 +142,7 @@ class WeekDetail extends React.Component<Props, State> {
 function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
     return {
         settings: globalState.settings,
-        users: globalState.users,
-        timeEntries: globalState.timeEntries
+        users: globalState.users
     };
 }
 

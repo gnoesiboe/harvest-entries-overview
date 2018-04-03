@@ -1,21 +1,35 @@
 // @flow
 
+import Moment from 'moment';
 import React from 'react';
 import type { User } from '../../../model/type';
 import type { TimeEntry } from '../../../model/type';
-
-export type OnRefreshCallback = () => void;
+import type { GlobalState } from '../../../redux/state/type';
+import Spinner from 'react-spinkit';
+import { connect } from 'react-redux';
+import { resolveTimeEntriesForUserOnDay } from '../../../resolver/timeEntriesResolver';
+import type { TimeEntriesReducerState } from '../../../redux/reducer/timeEntriesReducer';
+import { createFetchTimeEntriesForUserOnDayAction } from '../../../redux/action/factory/timeEntryActionFactory';
 
 type Props = {
     user: User,
-    onRefresh: OnRefreshCallback,
-    timeEntries: Array<TimeEntry>
+    day: Moment,
+    dispatch: Function,
+    timeEntries: TimeEntriesReducerState
 };
 
-export default class DayForUser extends React.Component<Props> {
+type ReduxProps = {
+    timeEntries: TimeEntriesReducerState
+}
+
+class DayForUser extends React.Component<Props> {
 
     _onRefreshClick = (): void => {
-        this.props.onRefresh();
+        var { user, dispatch, day } = this.props;
+
+        dispatch(
+            createFetchTimeEntriesForUserOnDayAction(user.id, day)
+        );
     };
 
     _renderTimeEntry(timeEntry: TimeEntry) {
@@ -27,7 +41,9 @@ export default class DayForUser extends React.Component<Props> {
     }
 
     render() {
-        var { timeEntries } = this.props;
+        var { timeEntries, user, day } = this.props;
+
+        var timeEntriesForUserOnDay = resolveTimeEntriesForUserOnDay(user.id, day, timeEntries);
 
         return (
             <div>
@@ -35,9 +51,17 @@ export default class DayForUser extends React.Component<Props> {
                     <i className="glyphicon glyphicon-refresh" />
                 </button>
                 <ul>
-                    { timeEntries.map((timeEntry: TimeEntry) => this._renderTimeEntry(timeEntry)) }
+                    { timeEntriesForUserOnDay.map((timeEntry: TimeEntry) => this._renderTimeEntry(timeEntry)) }
                 </ul>
             </div>
         );
     }
 }
+
+function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
+    return {
+        timeEntries: globalState.timeEntries
+    }
+}
+
+export default connect(_mapGlobalStateToProps)(DayForUser);
