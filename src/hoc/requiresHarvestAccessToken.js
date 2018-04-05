@@ -36,12 +36,17 @@ export default function(CompostedComponent: any ) {
         }
 
         componentWillUpdate(nextProps: Props) {
-            this.setState(currentState => {
-                return {
-                    ...currentState,
-                    accessTokenIsSet: isString(nextProps.harvestAccessToken)
-                };
-            });
+            var isCurrentlySet = this.state.accessTokenIsSet,
+                isNowSet = isString(nextProps.harvestAccessToken);
+
+            if (isCurrentlySet !== isNowSet) {
+                this.setState(currentState => {
+                    return {
+                        ...currentState,
+                        accessTokenIsSet: isString(nextProps.harvestAccessToken)
+                    };
+                });
+            }
         }
 
         render() {

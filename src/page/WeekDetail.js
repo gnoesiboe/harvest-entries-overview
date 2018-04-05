@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { extractPath } from '../utility/objectPathHelper';
-import { Redirect } from 'react-router-dom';
-import { createHomePath } from '../routing/urlGenerator';
+import { Redirect, Link } from 'react-router-dom';
+import { createHomePath, createWeekDetailPath } from '../routing/urlGenerator';
 import requiresHarvestAccessToken from '../hoc/requiresHarvestAccessToken';
 import { connect } from 'react-redux';
 import type { GlobalState } from '../redux/state/type';
@@ -14,6 +14,7 @@ import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utilit
 import Moment from 'moment';
 import DayForUser from '../lib/forms/component/DayForUser';
 import { resolveUser } from '../resolver/userResolver';
+import { getPreviousWeekNumber } from '../utility/dateTimeHelper';
 
 type Props = {
     settings: SettingsReducerState,
@@ -32,7 +33,7 @@ type ReduxProps = {
 };
 
 type State = {
-    weekNumber: ?number
+    weekNumber: ?number | boolean
 };
 
 const COLUMN_WIDTH = 100 / 8;
@@ -43,18 +44,28 @@ class WeekDetail extends React.Component<Props, State> {
         weekNumber: null
     };
 
-    componentWillMount(): void {
-        var weekNumber = extractPath('match.params.number', this.props, false);
-
-        this.setState(currentState => {
-            return { ...currentState, weekNumber };
-        });
-    }
-
     componentDidMount(): void {
         this.props.dispatch(
             createFetchAllUsersAction()
         )
+    }
+
+    static _extractWeekNumberFromRoutingParams(props: Props): number | boolean {
+        return extractPath('match.params.number', props, false);
+    }
+
+    // noinspection JSUnusedGlobalSymbols
+    static getDerivedStateFromProps(nextProps: Props, prevState: State): ?State {
+        var currentWeekNumber = prevState.weekNumber,
+            nextWeekNumber = WeekDetail._extractWeekNumberFromRoutingParams(nextProps);
+
+        if (currentWeekNumber !== nextWeekNumber) {
+            return {
+                weekNumber: nextWeekNumber
+            };
+        }
+
+        return null;
     }
 
     _renderTableHead(allDatesToRender: Array<Moment>) {
@@ -110,6 +121,27 @@ class WeekDetail extends React.Component<Props, State> {
         );
     }
 
+    _renderWeekPagination() {
+        var { weekNumber } = this.state;
+
+        if (!weekNumber) {
+            return null;
+        }
+
+        var previousWeekNumber = getPreviousWeekNumber(weekNumber);
+
+        return (
+            <ul className="list-inline pull-right">
+                <li>
+                    <Link to={ createWeekDetailPath(previousWeekNumber) } className="btn btn-link">
+                        <i className="glyphicon glyphicon-step-backward" />
+                        Previous
+                    </Link>
+                </li>
+            </ul>
+        );
+    }
+
     render() {
         var { weekNumber } = this.state;
         var { users } = this.props;
@@ -129,6 +161,7 @@ class WeekDetail extends React.Component<Props, State> {
 
         return (
             <div>
+                { this._renderWeekPagination() }
                 <h1>Time entries { startOfWeek.format('D MMMM') } - { endOfWeek.format('D MMMM') }</h1>
                 <table className="table table-striped">
                     { this._renderTableHead(allDatesToRender) }

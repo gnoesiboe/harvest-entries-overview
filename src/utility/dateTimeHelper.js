@@ -18,6 +18,16 @@ export function getEndOfWeek(weekNumber: number): Moment {
     return moment.endOf('isoWeek')
 }
 
+export function getPreviousWeekNumber(weekNumber: number): number {
+    if (weekNumber > 2) {
+        return weekNumber - 1;
+    }
+
+    var previousYear = parseInt(Moment().year(), 10) - 1;
+
+    return getNumberOfWeeksInYear(previousYear);
+}
+
 export function getAllDatesWithinPeriod(start: Moment, end: Moment): Array<Moment> {
     var moments = [];
 
@@ -31,4 +41,11 @@ export function getAllDatesWithinPeriod(start: Moment, end: Moment): Array<Momen
     }
 
     return moments;
+}
+
+export function getNumberOfWeeksInYear(year: number): number {
+    return Math.max(
+        Moment(new Date(year, 11, 31)).isoWeek(),
+        Moment(new Date(year, 11, 31 - 7)).isoWeek()
+   );
 }
