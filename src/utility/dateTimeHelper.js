@@ -7,11 +7,13 @@ export function getCurrentWeekNumber(): number {
 }
 
 export function getStartOfWeek(weekNumber: number): Moment {
-    return Moment().isoWeek(weekNumber);
+    var moment: Moment = Moment().isoWeek(weekNumber);
+    
+    return moment.startOf('isoWeek');
 }
 
 export function getEndOfWeek(weekNumber: number): Moment {
-    var moment = Moment().isoWeek(weekNumber);
+    var moment: Moment = Moment().isoWeek(weekNumber);
 
     return moment.endOf('isoWeek')
 }
