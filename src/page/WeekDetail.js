@@ -79,7 +79,7 @@ class WeekDetail extends React.Component<Props, State> {
                         return (
                             <th key={ dayInMonth } style={{ width: `${COLUMN_WIDTH}%` }}>
                                 { dayInMonth }
-                                </th>
+                            </th>
                         )
                     }) }
                 </tr>
