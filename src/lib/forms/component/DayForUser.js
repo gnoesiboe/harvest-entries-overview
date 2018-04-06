@@ -12,6 +12,7 @@ import type { TimeEntriesReducerState } from '../../../redux/reducer/timeEntries
 import { createFetchTimeEntriesForUserOnDayAction } from '../../../redux/action/factory/timeEntryActionFactory';
 import groupArray from 'group-array';
 import ProjectTimeEntries from '../../../components/ProjectTimeEntries';
+import RefreshButton from '../../../components/RefreshButton';
 
 type Props = {
     user: User,
@@ -104,9 +105,7 @@ class DayForUser extends React.Component<Props, State> {
 
         return (
             <div>
-                <button className="btn btn-link" onClick={ this._onRefreshClick }>
-                    <i className="glyphicon glyphicon-refresh" />
-                </button>
+                <RefreshButton onClick={ this._onRefreshClick } />
 
                 { Object.keys(timeEntriesGroupedByProject).map((projectName: string, index: number) => {
                     var timeEntriesInProject: Array<TimeEntry> = timeEntriesGroupedByProject[projectName];
