@@ -5,7 +5,6 @@ import React from 'react';
 import type { User } from '../../../model/type';
 import type { TimeEntry } from '../../../model/type';
 import type { GlobalState } from '../../../redux/state/type';
-import LoadingIndicator from 'react-loading-indicator';
 import { connect } from 'react-redux';
 import { resolveTimeEntriesForUserOnDay } from '../../../resolver/timeEntriesResolver';
 import type { TimeEntriesReducerState } from '../../../redux/reducer/timeEntriesReducer';
@@ -13,6 +12,7 @@ import { createFetchTimeEntriesForUserOnDayAction } from '../../../redux/action/
 import groupArray from 'group-array';
 import ProjectTimeEntries from '../../../components/ProjectTimeEntries';
 import RefreshButton from '../../../components/RefreshButton';
+import LoadingButton from '../../../components/LoadingButton';
 
 type Props = {
     user: User,
@@ -94,9 +94,7 @@ class DayForUser extends React.Component<Props, State> {
         if (!Array.isArray(timeEntries)) {
             return (
                 <div>
-                    <button className="btn btn-link" disabled={ true }>
-                        <LoadingIndicator/>
-                    </button>
+                    <LoadingButton />
                 </div>
             );
         }
