@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { extractPath } from '../utility/objectPathHelper';
-import { Redirect, Link } from 'react-router-dom';
-import { createHomePath, createWeekDetailPath } from '../routing/urlGenerator';
+import { Redirect } from 'react-router-dom';
+import { createHomePath } from '../routing/urlGenerator';
 import requiresHarvestAccessToken from '../hoc/requiresHarvestAccessToken';
 import { connect } from 'react-redux';
 import type { GlobalState } from '../redux/state/type';
@@ -14,7 +14,7 @@ import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utilit
 import Moment from 'moment';
 import DayForUser from '../lib/forms/component/DayForUser';
 import { resolveUser } from '../resolver/userResolver';
-import { getPreviousWeekNumber, getNextWeekNumber } from '../utility/dateTimeHelper';
+import WeekPagination from '../components/WeekPagination';
 
 type Props = {
     settings: SettingsReducerState,
@@ -128,23 +128,7 @@ class WeekDetail extends React.Component<Props, State> {
             return null;
         }
 
-        var previousWeekNumber: number = getPreviousWeekNumber(parseInt(weekNumber, 10)),
-            nextWeekNumber: number = getNextWeekNumber(parseInt(weekNumber, 10));
-
-        return (
-            <ul className="list-inline pull-right">
-                <li>
-                    <Link to={ createWeekDetailPath(previousWeekNumber) } className="btn btn-link">
-                        <i className="glyphicon glyphicon-step-backward" />
-                        Previous
-                    </Link>
-                    <Link to={ createWeekDetailPath(nextWeekNumber) } className="btn btn-link">
-                        <i className="glyphicon glyphicon-step-forward" />
-                        Next
-                    </Link>
-                </li>
-            </ul>
-        );
+        return <WeekPagination currentWeekNumber={ parseInt(weekNumber, 10) } />
     }
 
     render() {
