@@ -11,6 +11,7 @@ import { resolveTimeEntriesForUserOnDay } from '../../../resolver/timeEntriesRes
 import type { TimeEntriesReducerState } from '../../../redux/reducer/timeEntriesReducer';
 import { createFetchTimeEntriesForUserOnDayAction } from '../../../redux/action/factory/timeEntryActionFactory';
 import groupArray from 'group-array';
+import ProjectTimeEntries from '../../../components/ProjectTimeEntries';
 
 type Props = {
     user: User,
@@ -86,15 +87,6 @@ class DayForUser extends React.Component<Props, State> {
         }
     };
 
-    _renderTimeEntry(timeEntry: TimeEntry) {
-        return (
-            <li className="list-group-item" key={ timeEntry.id }>
-                <span className="badge">{ timeEntry.hours }</span>
-                { timeEntry.task.name }
-            </li>
-        )
-    }
-
     render() {
         var { timeEntries } = this.state;
 
@@ -116,18 +108,16 @@ class DayForUser extends React.Component<Props, State> {
                     <i className="glyphicon glyphicon-refresh" />
                 </button>
 
-                { Object.keys(timeEntriesGroupedByProject).map((projectName: string) => {
+                { Object.keys(timeEntriesGroupedByProject).map((projectName: string, index: number) => {
                     var timeEntriesInProject: Array<TimeEntry> = timeEntriesGroupedByProject[projectName];
 
                     return (
-                        <div className="panel panel-info" key={ projectName }>
-                            <div className="panel-heading">{ projectName }</div>
-
-                            <ul className="list-group">
-                                { timeEntriesInProject.map((timeEntry: TimeEntry) => this._renderTimeEntry(timeEntry)) }
-                            </ul>
-                        </div>
-                    )
+                        <ProjectTimeEntries
+                            key={ index }
+                            projectName={ projectName }
+                            timeEntries={ timeEntriesInProject }
+                        />
+                    );
                 }) }
             </div>
         );
