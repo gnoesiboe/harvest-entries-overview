@@ -14,7 +14,7 @@ import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utilit
 import Moment from 'moment';
 import DayForUser from '../lib/forms/component/DayForUser';
 import { resolveUser } from '../resolver/userResolver';
-import { getPreviousWeekNumber } from '../utility/dateTimeHelper';
+import { getPreviousWeekNumber, getNextWeekNumber } from '../utility/dateTimeHelper';
 
 type Props = {
     settings: SettingsReducerState,
@@ -128,7 +128,8 @@ class WeekDetail extends React.Component<Props, State> {
             return null;
         }
 
-        var previousWeekNumber = getPreviousWeekNumber(weekNumber);
+        var previousWeekNumber: number = getPreviousWeekNumber(parseInt(weekNumber, 10)),
+            nextWeekNumber: number = getNextWeekNumber(parseInt(weekNumber, 10));
 
         return (
             <ul className="list-inline pull-right">
@@ -136,6 +137,10 @@ class WeekDetail extends React.Component<Props, State> {
                     <Link to={ createWeekDetailPath(previousWeekNumber) } className="btn btn-link">
                         <i className="glyphicon glyphicon-step-backward" />
                         Previous
+                    </Link>
+                    <Link to={ createWeekDetailPath(nextWeekNumber) } className="btn btn-link">
+                        <i className="glyphicon glyphicon-step-forward" />
+                        Next
                     </Link>
                 </li>
             </ul>
@@ -154,8 +159,8 @@ class WeekDetail extends React.Component<Props, State> {
             return <i>Loading..</i>;
         }
 
-        var startOfWeek = getStartOfWeek(weekNumber),
-            endOfWeek = getEndOfWeek(weekNumber);
+        var startOfWeek = getStartOfWeek(parseInt(weekNumber, 10)),
+            endOfWeek = getEndOfWeek(parseInt(weekNumber, 10));
 
         var allDatesToRender = getAllDatesWithinPeriod(startOfWeek, endOfWeek);
 

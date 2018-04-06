@@ -8,7 +8,7 @@ export function getCurrentWeekNumber(): number {
 
 export function getStartOfWeek(weekNumber: number): Moment {
     var moment: Moment = Moment().isoWeek(weekNumber);
-    
+
     return moment.startOf('isoWeek');
 }
 
@@ -23,9 +23,20 @@ export function getPreviousWeekNumber(weekNumber: number): number {
         return weekNumber - 1;
     }
 
-    var previousYear = parseInt(Moment().year(), 10) - 1;
+    var previousYear: number = parseInt(Moment().year(), 10) - 1;
 
     return getNumberOfWeeksInYear(previousYear);
+}
+
+export function getNextWeekNumber(weekNumber: number): number {
+    var currentYear: number = parseInt(Moment().year(), 10),
+        numberOfWeeksInThisYear: number = getNumberOfWeeksInYear(currentYear);
+
+    if ((weekNumber + 1) > numberOfWeeksInThisYear) {
+        return 1;
+    }
+
+    return weekNumber + 1;
 }
 
 export function getAllDatesWithinPeriod(start: Moment, end: Moment): Array<Moment> {
