@@ -45,9 +45,9 @@ class WeekDetail extends React.Component<Props, State> {
     };
 
     componentDidMount(): void {
-        this.props.dispatch(
-            createFetchAllUsersAction()
-        )
+        var { dispatch, users } = this.props;
+
+        dispatch(createFetchAllUsersAction());
     }
 
     static _extractWeekNumberFromRoutingParams(props: Props): number | boolean {
