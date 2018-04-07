@@ -11,10 +11,8 @@ import type { SettingsReducerState } from '../redux/reducer/settingsReducer';
 import type { UsersReducerState } from '../redux/reducer/usersReducer';
 import { createFetchAllUsersAction } from '../redux/action/factory/userActionFactory';
 import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utility/dateTimeHelper';
-import Moment from 'moment';
-import DayForUser from '../lib/forms/component/DayForUser';
-import { resolveUser } from '../resolver/userResolver';
 import WeekPagination from '../components/WeekPagination';
+import WeekEntriesTable from '../components/WeekEntriesTable';
 
 type Props = {
     settings: SettingsReducerState,
@@ -36,8 +34,6 @@ type State = {
     weekNumber: ?number | boolean
 };
 
-const COLUMN_WIDTH = 100 / 8;
-
 class WeekDetail extends React.Component<Props, State> {
 
     state: State = {
@@ -45,7 +41,7 @@ class WeekDetail extends React.Component<Props, State> {
     };
 
     componentDidMount(): void {
-        var { dispatch, users } = this.props;
+        var { dispatch } = this.props;
 
         dispatch(createFetchAllUsersAction());
     }
@@ -68,59 +64,6 @@ class WeekDetail extends React.Component<Props, State> {
         return null;
     }
 
-    _renderTableHead(allDatesToRender: Array<Moment>) {
-        return (
-            <thead>
-                <tr>
-                    <th style={{ width: `${COLUMN_WIDTH}%` }}>User</th>
-                    { allDatesToRender.map((day) => {
-                        var dayInMonth = day.format('D MMM');
-
-                        return (
-                            <th key={ dayInMonth } style={{ width: `${COLUMN_WIDTH}%` }}>
-                                { dayInMonth }
-                            </th>
-                        )
-                    }) }
-                </tr>
-            </thead>
-        );
-    }
-
-    _renderTableBody(allDatesToRender: Array<Moment>) {
-        var { settings, users } = this.props;
-
-        var userIds = settings.userIds;
-
-        return (
-            <tbody>
-                { userIds.map((userId: number) => {
-                    var user = resolveUser(userId, users);
-
-                    return (
-                        <tr key={ userId.toString() }>
-                            <th key="0">
-                                { user.name }
-                            </th>
-                            { allDatesToRender.map((day) => {
-                                var dayInMonth = day.format('D');
-
-                                return (
-                                    <td key={ dayInMonth } className="text-left">
-                                        <DayForUser
-                                            user={ user }
-                                            day={ day }
-                                        />
-                                    </td>
-                                )
-                            }) }
-                        </tr>
-                    );
-                }) }
-            </tbody>
-        );
-    }
-
     _renderWeekPagination() {
         var { weekNumber } = this.state;
 
@@ -133,7 +76,7 @@ class WeekDetail extends React.Component<Props, State> {
 
     render() {
         var { weekNumber } = this.state;
-        var { users } = this.props;
+        var { users, settings } = this.props;
 
         if (weekNumber === false) {
             return <Redirect to={ createHomePath() } />;
@@ -152,10 +95,11 @@ class WeekDetail extends React.Component<Props, State> {
             <div>
                 { this._renderWeekPagination() }
                 <h1>Time entries { startOfWeek.format('D MMMM') } - { endOfWeek.format('D MMMM') }</h1>
-                <table className="table table-striped">
-                    { this._renderTableHead(allDatesToRender) }
-                    { this._renderTableBody(allDatesToRender) }
-                </table>
+                <WeekEntriesTable
+                    userIds={ settings.userIds }
+                    users={ users }
+                    dates={ allDatesToRender }
+                />
             </div>
         );
     }
