@@ -25,6 +25,6 @@ export type FetchTimeEntriesForUserOnDayAction = $ReadOnly<{
 }>;
 
 // @todo have it better match reality
-export type FetchTimeEntriesForUserInWeek = $ReadOnly<{
+export type FetchTimeEntriesForUserInWeekAction = $ReadOnly<{
     type: FETCH_TIME_ENTRIES_FOR_USER_IN_WEEK
 }>;

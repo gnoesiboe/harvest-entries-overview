@@ -97,8 +97,8 @@ class WeekDetail extends React.Component<Props, State> {
                 <h1>Time entries { startOfWeek.format('D MMMM') } - { endOfWeek.format('D MMMM') }</h1>
                 <WeekEntriesTable
                     userIds={ settings.userIds }
-                    users={ users }
                     dates={ allDatesToRender }
+                    weekNumber={ parseInt(weekNumber, 10) }
                 />
             </div>
         );

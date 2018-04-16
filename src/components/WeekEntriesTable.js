@@ -5,16 +5,43 @@ import Moment from 'moment';
 import type { UsersReducerState } from '../redux/reducer/usersReducer';
 import { resolveUser } from '../resolver/userResolver';
 import DayForUser from '../lib/forms/component/DayForUser';
+import { connect } from 'react-redux';
+import type { GlobalState } from '../redux/state/type';
+import { createFetchTimeEntriesForUserInWeekAction } from '../redux/action/factory/timeEntryActionFactory';
 
 type Props = {
     userIds: Array<number>,
     users: UsersReducerState,
-    dates: Array<Moment>
+    dates: Array<Moment>,
+    dispatch: Function,
+    weekNumber: number
+};
+
+type ReduxProps = {
+    users: UsersReducerState,
 };
 
 const COLUMN_WIDTH = 100 / 8;
 
-export default class WeekEntriesTable extends React.Component<Props> {
+class WeekEntriesTable extends React.Component<Props> {
+
+    componentDidMount() {
+        this._fetchTimeEntriesForAllUsers();
+    }
+
+    _fetchTimeEntriesForAllUsers(): void {
+        var { userIds } = this.props;
+
+        userIds.forEach(userId => this._fetchTimeEntriesForUser(userId));
+    }
+
+    _fetchTimeEntriesForUser = (userId: number): void => {
+        var { dispatch, weekNumber } = this.props;
+
+        dispatch(
+            createFetchTimeEntriesForUserInWeekAction(userId, weekNumber)
+        );
+    }
 
     _renderTableHead() {
         var { dates } = this.props;
@@ -78,3 +105,11 @@ export default class WeekEntriesTable extends React.Component<Props> {
         );
     }
 }
+
+function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
+    return {
+        users: globalState.users
+    };
+}
+
+export default connect(_mapGlobalStateToProps)(WeekEntriesTable);

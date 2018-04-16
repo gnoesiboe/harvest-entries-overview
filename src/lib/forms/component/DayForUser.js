@@ -39,10 +39,6 @@ class DayForUser extends React.Component<Props, State> {
         )
     };
 
-    componentDidMount() {
-        this._fetchTimeEntries();
-    }
-
     // noinspection JSUnusedGlobalSymbols
     static getDerivedStateFromProps(nextProps: Props, prevState: State): ?State {
         var currentTimeEntries = prevState.timeEntries;
