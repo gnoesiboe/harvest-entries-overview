@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { extractPath } from '../utility/objectPathHelper';
 import { Redirect } from 'react-router-dom';
 import { createHomePath } from '../routing/urlGenerator';
 import requiresHarvestAccessToken from '../hoc/requiresHarvestAccessToken';
@@ -13,8 +12,10 @@ import { createFetchAllUsersAction } from '../redux/action/factory/userActionFac
 import { getStartOfWeek, getEndOfWeek, getAllDatesWithinPeriod } from '../utility/dateTimeHelper';
 import WeekPagination from '../components/WeekPagination';
 import WeekEntriesTable from '../components/WeekEntriesTable';
+import { extractWeekNumberFromRouteParams } from '../utility/routeParamExtractor';
 
 type Props = {
+    weekNumber: ?number,
     settings: SettingsReducerState,
     users: UsersReducerState,
     dispatch: Dispatch,
@@ -26,19 +27,12 @@ type Props = {
 };
 
 type ReduxProps = {
+    weekNumber: ?number,
     settings: SettingsReducerState,
     users: UsersReducerState,
 };
 
-type State = {
-    weekNumber: ?number | boolean
-};
-
-class WeekDetail extends React.Component<Props, State> {
-
-    state: State = {
-        weekNumber: null
-    };
+class WeekDetail extends React.Component<Props> {
 
     componentDidMount(): void {
         var { dispatch } = this.props;
@@ -46,26 +40,8 @@ class WeekDetail extends React.Component<Props, State> {
         dispatch(createFetchAllUsersAction());
     }
 
-    static _extractWeekNumberFromRoutingParams(props: Props): number | boolean {
-        return extractPath('match.params.number', props, false);
-    }
-
-    // noinspection JSUnusedGlobalSymbols
-    static getDerivedStateFromProps(nextProps: Props, prevState: State): ?State {
-        var currentWeekNumber = prevState.weekNumber,
-            nextWeekNumber = WeekDetail._extractWeekNumberFromRoutingParams(nextProps);
-
-        if (currentWeekNumber !== nextWeekNumber) {
-            return {
-                weekNumber: nextWeekNumber
-            };
-        }
-
-        return null;
-    }
-
     _renderWeekPagination() {
-        var { weekNumber } = this.state;
+        var { weekNumber } = this.props;
 
         if (!weekNumber) {
             return null;
@@ -75,14 +51,13 @@ class WeekDetail extends React.Component<Props, State> {
     }
 
     render() {
-        var { weekNumber } = this.state;
-        var { users, settings } = this.props;
+        var { weekNumber, users, settings } = this.props;
 
-        if (weekNumber === false) {
+        if (!weekNumber) {
             return <Redirect to={ createHomePath() } />;
         }
 
-        if (!weekNumber || users.length === 0) {
+        if (users.length === 0) {
             return <i>Loading..</i>;
         }
 
@@ -105,8 +80,9 @@ class WeekDetail extends React.Component<Props, State> {
     }
 }
 
-function _mapGlobalStateToProps(globalState: GlobalState): ReduxProps {
+function _mapGlobalStateToProps(globalState: GlobalState, props: Props): ReduxProps {
     return {
+        weekNumber: extractWeekNumberFromRouteParams(props, 'number'),
         settings: globalState.settings,
         users: globalState.users
     };
