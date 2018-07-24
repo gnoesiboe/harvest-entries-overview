@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import SettingsForm from '../components/SettingsForm';
 import type { OnSubmitCallback } from '../components/SettingsForm';
 import { connect } from 'react-redux';
@@ -68,7 +68,7 @@ class Settings extends React.Component<Props, State> {
         }
 
         return (
-            <div>
+            <Fragment>
                 <h1>Settings</h1>
                 <SettingsForm
                     harvestAccessToken={ settings.harvestAccessToken }
@@ -77,7 +77,7 @@ class Settings extends React.Component<Props, State> {
                     users={ users }
                     onSubmit={ this._onFormSubmit }
                 />
-            </div>
+            </Fragment>
         );
     }
 }
