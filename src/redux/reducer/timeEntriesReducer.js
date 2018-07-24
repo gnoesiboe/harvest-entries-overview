@@ -46,12 +46,12 @@ function _handleFetchTimeEntriesForUserInWeekAction(currentState: TimeEntriesRed
 export default function timeEntriesReducer(currentState: TimeEntriesReducerState = {}, action: Action): TimeEntriesReducerState {
     switch (action.type) {
         case `${FETCH_TIME_ENTRIES_FOR_USER_ON_DAY}_${FULFILLED}`:
-            var fetchTimeEntriesForUserOnDayAction: FetchTimeEntriesForUserOnDayAction = (action: Action);
-            return _handleFetchTimeEntriesForUserOnDayAction(currentState, fetchTimeEntriesForUserOnDayAction);
+            var fetchTimeEntriesForUserOnDayActionObject: FetchTimeEntriesForUserOnDayAction = (action: Action);
+            return _handleFetchTimeEntriesForUserOnDayAction(currentState, fetchTimeEntriesForUserOnDayActionObject);
 
         case `${FETCH_TIME_ENTRIES_FOR_USER_IN_WEEK}_${FULFILLED}`:
-            var fetchTimeEntriesForUserOnDayAction: FetchTimeEntriesForUserInWeekAction = (action: Action);
-            return _handleFetchTimeEntriesForUserInWeekAction(currentState, fetchTimeEntriesForUserOnDayAction);
+            var fetchTimeEntriesForUserInWeekActionObject: FetchTimeEntriesForUserInWeekAction = (action: Action);
+            return _handleFetchTimeEntriesForUserInWeekAction(currentState, fetchTimeEntriesForUserInWeekActionObject);
 
         default:
             return currentState;
