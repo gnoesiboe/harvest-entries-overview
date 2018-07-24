@@ -5,15 +5,12 @@ import { Redirect } from 'react-router-dom';
 import { createWeekDetailPath } from '../routing/urlGenerator';
 import { getCurrentWeekNumber } from '../utility/dateTimeHelper';
 
-type Props = {};
+var CurrentWeekRedirect = () => {
+    var path = createWeekDetailPath(
+        getCurrentWeekNumber()
+    );
 
-export default class CurrentWeekRedirect extends React.Component<Props> {
+    return <Redirect to={ path } />;
+};
 
-    render() {
-        var path = createWeekDetailPath(
-            getCurrentWeekNumber()
-        );
-
-        return <Redirect to={ path } />;
-    }
-}
+export default CurrentWeekRedirect;
