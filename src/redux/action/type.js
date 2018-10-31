@@ -11,7 +11,10 @@ export type UpdateSettingsAction = $ReadOnly<{
     type: UPDATE_SETTINGS,
     harvestAccessToken: String,
     harvestAccountId: String,
-    userIds: Array<number>
+    userIds: Array<number>,
+    jiraUrl: string,
+    jiraUsername: string,
+    jiraPassword: string
 }>;
 
 // @todo have it better match reality

@@ -6,12 +6,18 @@ import { UPDATE_SETTINGS } from '../type';
 export function createUpdateSettingsAction(
     harvestAccessToken: string,
     harvestAccountId: string,
-    userIds: Array<number>
+    userIds: Array<number>,
+    jiraUrl: string,
+    jiraUsername: string,
+    jiraPassword: string
 ): UpdateSettingsAction {
     return {
         type: UPDATE_SETTINGS,
         harvestAccessToken,
         harvestAccountId,
-        userIds
+        userIds,
+        jiraUrl,
+        jiraUsername,
+        jiraPassword
     };
 }

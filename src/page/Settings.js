@@ -45,11 +45,18 @@ class Settings extends React.Component<Props, State> {
         );
     }
 
-    _onFormSubmit: OnSubmitCallback = (harvestAccessToken: string, harvestAccountId: string, userIds: Array<number>) => {
+    _onFormSubmit: OnSubmitCallback = (
+        harvestAccessToken: string,
+        harvestAccountId: string,
+        userIds: Array<number>,
+        jiraUrl: string,
+        jiraUsername: string,
+        jiraPassword: string
+    ) => {
         var { dispatch } = this.props;
 
         dispatch(
-            createUpdateSettingsAction(harvestAccessToken, harvestAccountId, userIds)
+            createUpdateSettingsAction(harvestAccessToken, harvestAccountId, userIds, jiraUrl, jiraUsername, jiraPassword)
         );
 
         this.setState(
@@ -74,6 +81,9 @@ class Settings extends React.Component<Props, State> {
                     harvestAccessToken={ settings.harvestAccessToken }
                     harvestAccountId={ settings.harvestAccountId }
                     userIds={ settings.userIds }
+                    jiraUrl={ settings.jiraUrl }
+                    jiraUsername={ settings.jiraUsername }
+                    jiraPassword={ settings.jiraPassword }
                     users={ users }
                     onSubmit={ this._onFormSubmit }
                 />

@@ -6,13 +6,19 @@ import { UPDATE_SETTINGS } from '../action/type';
 export type SettingsReducerState = {
     harvestAccessToken: string | null,
     harvestAccountId: string | null,
-    userIds: Array<number>
+    userIds: Array<number>,
+    jiraUrl: string | null,
+    jiraUsername: string | null,
+    jiraPassword: string | null
 };
 
 const DEFAULT_STATE: SettingsReducerState = {
     harvestAccessToken: null,
     harvestAccountId: null,
-    userIds: []
+    userIds: [],
+    jiraUrl: null,
+    jiraUsername: null,
+    jiraPassword: null
 };
 
 export default function settingsReducer(currentState: SettingsReducerState = DEFAULT_STATE, action: Action): SettingsReducerState {
@@ -21,9 +27,7 @@ export default function settingsReducer(currentState: SettingsReducerState = DEF
             var updateSettingsAction : UpdateSettingsAction = (action: Action);
             return {
                 ...currentState,
-                harvestAccessToken: updateSettingsAction.harvestAccessToken,
-                harvestAccountId: updateSettingsAction.harvestAccountId,
-                userIds: updateSettingsAction.userIds
+                ...updateSettingsAction
             };
 
         default:

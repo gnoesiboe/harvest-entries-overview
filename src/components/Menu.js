@@ -82,8 +82,8 @@ class Menu extends React.Component<Props, State> {
         console.log('open', open);
 
         return (
-            <BurgerMenu 
-                pageWrapId="outer-container" 
+            <BurgerMenu
+                pageWrapId="outer-container"
                 styles={ styles }
                 isOpen={ open }
                 onStateChange={ this._onStateChange }
