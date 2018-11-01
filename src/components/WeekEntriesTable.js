@@ -96,11 +96,35 @@ class WeekEntriesTable extends React.Component<Props> {
         );
     }
 
+    _renderTableFooter() {
+        var { dates } = this.props;
+
+        return (
+            <tfoot>
+                <tr>
+                    <th key="0">
+                        <strong>Totalen</strong>
+                    </th>
+                    { dates.map((day) => {
+                        var dayInMonth = day.format('D');
+
+                        return (
+                            <td key={ dayInMonth } className="text-left">
+                                @todo
+                            </td>
+                        );
+                    }) }
+                </tr>
+            </tfoot>
+        )
+    }
+
     render() {
         return (
             <table className="table table-striped">
                 { this._renderTableHead() }
                 { this._renderTableBody() }
+                { this._renderTableFooter() }
             </table>
         );
     }
