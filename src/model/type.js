@@ -1,11 +1,11 @@
 // @flow
 
-export type User = $ReadOnly<{
+export type User = $ReadOnly<{|
     id: number,
     name: string
-}>;
+|}>;
 
-export type TimeEntry = $ReadOnly<{
+export type TimeEntry = $ReadOnly<{|
     id: number,
     spentAt: string,
     hours: number,
@@ -20,4 +20,4 @@ export type TimeEntry = $ReadOnly<{
     },
     billable: boolean,
     notes: ?string
-}>;
+|}>;
